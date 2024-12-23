@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Cookie dan Browser Storage</title>
+    <link rel="stylesheet" href="../public/css/style.css" />
+    <link rel="stylesheet" href="../public/css/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h2>Kelola State dengan Cookie dan Browser Storage</h2>
+    </header>
+
+    <nav class="navigation">
+      <ul>
+        <li><a href="dashboard.php">Dashboard</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Form untuk Cookie -->
+      <section>
+        <h2>Kelola Cookie</h2>
+        <form id="cookieForm">
+          <label for="cookieInput">Masukkan Nilai Cookie:</label>
+          <input
+            type="text"
+            id="cookieInput"
+            placeholder="Masukkan nilai..."
+            required
+          />
+          <button type="button" id="setCookie">Set Cookie</button>
+          <button type="button" id="deleteCookie">Hapus Cookie</button>
+        </form>
+        <p>
+          <strong>Nilai Cookie:</strong>
+          <span id="cookieDisplay">Belum ada nilai</span>
+        </p>
+      </section>
+
+      <!-- Form untuk LocalStorage -->
+      <section>
+        <h2>Kelola LocalStorage</h2>
+        <form id="localStorageForm">
+          <label for="localStorageInput">Masukkan Nilai LocalStorage:</label>
+          <input
+            type="text"
+            id="localStorageInput"
+            placeholder="Masukkan nilai..."
+            required
+          />
+          <button type="button" id="setLocalStorage">Set LocalStorage</button>
+          <button type="button" id="deleteLocalStorage">
+            Hapus LocalStorage
+          </button>
+        </form>
+        <p>
+          <strong>Nilai LocalStorage:</strong>
+          <span id="localStorageDisplay">Belum ada nilai</span>
+        </p>
+      </section>
+
+      <!-- Form untuk SessionStorage -->
+      <section>
+        <h2>Kelola SessionStorage</h2>
+        <form id="sessionStorageForm">
+          <label for="sessionStorageInput"
+            >Masukkan Nilai SessionStorage:</label
+          >
+          <input
+            type="text"
+            id="sessionStorageInput"
+            placeholder="Masukkan nilai..."
+            required
+          />
+          <button type="button" id="setSessionStorage">
+            Set SessionStorage
+          </button>
+          <button type="button" id="deleteSessionStorage">
+            Hapus SessionStorage
+          </button>
+        </form>
+        <p>
+          <strong>Nilai SessionStorage:</strong>
+          <span id="sessionStorageDisplay">Belum ada nilai</span>
+        </p>
+      </section>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Referensi elemen DOM
+        const cookieInput = document.getElementById("cookieInput");
+        const localStorageInput = document.getElementById("localStorageInput");
+        const sessionStorageInput = document.getElementById(
+          "sessionStorageInput"
+        );
+
+        const cookieDisplay = document.getElementById("cookieDisplay");
+        const localStorageDisplay = document.getElementById(
+          "localStorageDisplay"
+        );
+        const sessionStorageDisplay = document.getElementById(
+          "sessionStorageDisplay"
+        );
+
+        // Fungsi untuk memperbarui tampilan nilai
+        function updateDisplays() {
+          // Tampilkan Cookie
+          const cookies = document.cookie.split("; ").reduce((acc, cookie) => {
+            const [key, value] = cookie.split("=");
+            acc[key] = value;
+            return acc;
+          }, {});
+          cookieDisplay.textContent =
+            cookies.thebugitselfCookie || "Belum ada nilai";
+
+          // Tampilkan LocalStorage
+          localStorageDisplay.textContent =
+            localStorage.getItem("thebugitselfLocalStorage") ||
+            "Belum ada nilai";
+
+          // Tampilkan SessionStorage
+          sessionStorageDisplay.textContent =
+            sessionStorage.getItem("thebugitselfSessionStorage") ||
+            "Belum ada nilai";
+        }
+
+        // Fungsi untuk Cookie
+        document.getElementById("setCookie").addEventListener("click", () => {
+          const value = cookieInput.value.trim();
+          if (!value) {
+            alert("Masukkan nilai terlebih dahulu!");
+            return;
+          }
+          document.cookie = `thebugitselfCookie=${value}; path=/; max-age=3600`; // Berlaku 1 jam
+          updateDisplays();
+        });
+
+        document
+          .getElementById("deleteCookie")
+          .addEventListener("click", () => {
+            document.cookie = "thebugitselfCookie=; path=/; max-age=0"; // Hapus cookie
+            updateDisplays();
+          });
+
+        // Fungsi untuk LocalStorage
+        document
+          .getElementById("setLocalStorage")
+          .addEventListener("click", () => {
+            const value = localStorageInput.value.trim();
+            if (!value) {
+              alert("Masukkan nilai terlebih dahulu!");
+              return;
+            }
+            localStorage.setItem("thebugitselfLocalStorage", value);
+            updateDisplays();
+          });
+
+        document
+          .getElementById("deleteLocalStorage")
+          .addEventListener("click", () => {
+            localStorage.removeItem("thebugitselfLocalStorage");
+            updateDisplays();
+          });
+
+        // Fungsi untuk SessionStorage
+        document
+          .getElementById("setSessionStorage")
+          .addEventListener("click", () => {
+            const value = sessionStorageInput.value.trim();
+            if (!value) {
+              alert("Masukkan nilai terlebih dahulu!");
+              return;
+            }
+            sessionStorage.setItem("thebugitselfSessionStorage", value);
+            updateDisplays();
+          });
+
+        document
+          .getElementById("deleteSessionStorage")
+          .addEventListener("click", () => {
+            sessionStorage.removeItem("thebugitselfSessionStorage");
+            updateDisplays();
+          });
+
+        // Inisialisasi tampilan
+        updateDisplays();
+      });
+    </script>
+  </body>
+</html>
